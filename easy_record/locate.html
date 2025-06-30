@@ -1,60 +1,67 @@
-<!DOCTYPE html>
-<html>
+<!--Chuck-Tha-Goat-was-here-->
+
+<link href='https://fonts.googleapis.com/css?family=Gluten' rel='stylesheet'>
+
 <head>
-    <link href='https://fonts.googleapis.com/css?family=Gluten' rel='stylesheet'>
-    <title>Recordly!</title>
-    <style>
-        h1 {
-            font-family: 'Gluten';font-size: 70px;
-            text-align: center;
-        }
-        .text {
-            border-radius: 25px;
-            font-size: 20px;
-            background-color: rgba(0,0,0,0.3);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-        }
-        .button {
-            border-radius: 25px;
-            font-family: 'Gluten';font-size: 40px;
-            background-color: rgba(0,0,0,0.3);
-            color: white;
-            border: none;
-            padding: 10px 30px;
-            cursor: pointer;
-        }
-        .r {
-            text-align: center;
-            color: white;
-        }
-        /* Position QR code and input at top-left fixed */
-        #qrcode {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            width: 128px;
-            height: 128px;
-            z-index: 1000;
-        }
-        #inputs {
-            position: fixed;
-            top: 300px; /* moved down as you asked */
-            left: 20px;
-            width: 200px;
-            border-radius: 15px;
-            font-size: 18px;
-            background-color: rgba(0,0,0,0.3);
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            z-index: 1000;
-        }
-        #inputs::placeholder {
-            color: #ccc;
-        }
-        body {
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<title>Recordly!</title>
+
+<style>
+#results {
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 10px;
+  list-style: none;
+}
+
+.links {
+  text-align: center;
+}
+
+
+.links a {
+  color: white;
+  text-decoration: none;
+}
+
+.links a:hover {
+  text-decoration: underline;
+}
+.name-input {
+  border-radius: 15px;
+  text-align: center;
+  display: block;
+  margin: 20px auto;
+  width: 300px;
+  height: 50px;
+  background-color: rgba(128, 128, 128, 0.8);
+    font-family: 'Gluten';font-size: 20px;
+}
+.title {
+  text-align: center;
+  font-family: 'Gluten';font-size: 70px;
+}
+.qrcode {
+  position: fixed;
+ margin-top: -200px; /* less space above */
+  margin-left: 50px; /* keep side margin if you want */
+}
+.qr-code-input {
+  position: fixed;
+  margin-top: 60px;
+  margin-left: 50px;
+    background-color: rgba(128, 128, 128, 0.8);
+    font-family: 'Gluten';font-size: 20px;
+  text-align: center;
+  border-radius: 15px;
+}
+.name-input::placeholder,
+.qr-code-input::placeholder {
+  color: #ccc; /* light gray – you can change this to anything */
+}
+body {
             background-image: url('br.png');
             background-size: cover;
             background-position: center;
@@ -62,62 +69,95 @@
             padding: 0 20px 40px 20px;
             font-family: 'Gluten', Arial, sans-serif;
         }
-    </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</style>
+
 </head>
+
 <body>
-    <h1>Recordly</h1>
-    <input type="text" id="searchInput" placeholder="Enter artist or record name" style="display: block; margin: 0 auto;" class="text">
-    <button onclick="search()" style="display: block; margin: 0 auto;" class="button">Search</button>
-    
-    <ul id="results" class="r"></ul>
-    <div id="qrcode"></div>
-    <form>
-        <input type="text" id="inputs" placeholder="Enter record ID" oninput="generateQRCode()" />
-    </form>
-    <script>
-        const token = 'LONsRzJDFSLAyHnlzYqYpOvoQQiMrkYTHnzEEuAD';
 
-        async function search() {
-            const query = document.getElementById('searchInput').value.trim();
-            const resultsList = document.getElementById('results');
-            resultsList.innerHTML = 'Loading...';
+  <p class="title">Recorldy!</p>
 
-            const url = `https://api.discogs.com/database/search?q=${encodeURIComponent(query)}&type=release&token=${token}&per_page=100`;
+  <input type="text" placeholder="label, artist, ect" class="name-input" oninput="search()" id="searchInput">
+  <ul id="results" class="links"></ul>
 
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
+  <div id="qrcode" class="qrcode"></div>
+  <input type="text" placeholder="Record Link" class="qr-code-input" id="inputs" oninput="generateQRCode()" />
 
-                if (data.results && data.results.length > 0) {
-                    resultsList.innerHTML = '';
-                    data.results.forEach(item => {
-                        const li = document.createElement('li');
-                        const a = document.createElement('a');
-                        a.href = `https://www.discogs.com/release/${item.id}`;
-                        a.textContent = `${item.title} (${item.year || 'Unknown year'})`;
-                        a.target = "_blank";
-                        a.rel = "noopener noreferrer";
-                        a.style.color = "white";
-                        li.appendChild(a);
-                        resultsList.appendChild(li);
-                    });
-                } else {
-                    resultsList.innerHTML = 'No results found.';
-                }
-            } catch (error) {
-                resultsList.innerHTML = 'Error fetching data.';
-                console.error(error);
-            }
-        }
-
-        function generateQRCode() {
-            var userInput = document.getElementById('inputs').value;
-            document.getElementById('qrcode').innerHTML = "";
-            if (userInput) {
-                var qrcode = new QRCode(document.getElementById("qrcode"), userInput);
-            }
-        }
-    </script>
 </body>
-</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+//QR-Code-Generator
+function generateQRCode() {
+  //gets you link for html
+  var userInput = document.getElementById('inputs').value;
+
+  //removes and existing stinky qr codes
+  document.getElementById('qrcode').innerHTML = "";
+
+  //print/make-new-qr-code
+  if (userInput) {
+    var qrcode = new QRCode(document.getElementById("qrcode"), userInput);
+  }
+}
+
+//Record-locator
+
+//token
+const token = 'LONsRzJDFSLAyHnlzYqYpOvoQQiMrkYTHnzEEuAD';
+
+let timeoutId; //wait a bit till the user stops typing to send api request i guess
+
+async function search() {
+  clearTimeout(timeoutId);
+
+  timeoutId = setTimeout(() => {
+    const input = document.getElementById('searchInput').value.trim();
+    const results = document.getElementById('results');
+
+    if (!input) {
+      results.innerHTML = '';
+      return;
+    }
+
+    const url = `https://api.discogs.com/database/search?q=${encodeURIComponent(input)}&type=release&token=${token}&per_page=100`;
+
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        results.innerHTML = '';
+
+        if (!data.results || data.results.length === 0) {
+          results.innerHTML = 'No results found.';
+          return;
+        }
+
+        data.results.forEach(item => {
+          const li = document.createElement('li');
+          li.innerHTML = `<a href="https://www.discogs.com/release/${item.id}" target="_blank" style="color:blue">
+            ${item.title} (${item.year || 'Unknown year'})
+          </a>`;
+          results.appendChild(li);
+        });
+      })
+      .catch(() => {
+        results.innerHTML = 'Error loading results.';
+      });
+  }, 400);
+}
+</script>
