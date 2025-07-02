@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href='https://fonts.googleapis.com/css?family=Gluten' rel='stylesheet'>
+    <title>Recordly!</title>
+    <style>
+        h1 {
+            font-family: 'Gluten';font-size: 70px;
+            text-align: center;
+        }
+        .text {
+            border-radius: 25px;
+            font-size: 20px;
+            background-color: rgba(0,0,0,0.3);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+        }
+        .button {
+            border-radius: 25px;
+            font-family: 'Gluten';font-size: 40px;
+            background-color: rgba(0,0,0,0.3);
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            cursor: pointer;
+        }
+        .r {
+            text-align: center;
+            color: white;
+        }
+        /* Position QR code and input at top-left fixed */
+        #qrcode {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 128px;
+            height: 128px;
+            z-index: 1000;
+        }
+        #inputs {
+            position: fixed;
+            top: 300px; /* moved down as you asked */
+            left: 20px;
+            width: 200px;
+            border-radius: 15px;
+            font-size: 18px;
+            background-color: rgba(0,0,0,0.3);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            z-index: 1000;
+        }
+        #inputs::placeholder {
+            color: #ccc;
+        }
+        body {
+            background-image: url('br.png');
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            padding: 0 20px 40px 20px;
+            font-family: 'Gluten', Arial, sans-serif;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+    <h1>Recordly</h1>
+    <input type="text" id="searchInput" placeholder="Enter artist or record name" style="display: block; margin: 0 auto;" class="text">
+    <button onclick="search()" style="display: block; margin: 0 auto;" class="button">Search</button>
+    
+    <ul id="results" class="r"></ul>
+    <div id="qrcode"></div>
+    <form>
+        <input type="text" id="inputs" placeholder="Enter record ID" oninput="generateQRCode()" />
+    </form>
+    <script>
+        const token = 'LONsRzJDFSLAyHnlzYqYpOvoQQiMrkYTHnzEEuAD';
+
+        async function search() {
+            const query = document.getElementById('searchInput').value.trim();
+            const resultsList = document.getElementById('results');
+            resultsList.innerHTML = 'Loading...';
+
+            const url = `https://api.discogs.com/database/search?q=${encodeURIComponent(query)}&type=release&token=${token}&per_page=100`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.results && data.results.length > 0) {
+                    resultsList.innerHTML = '';
+                    data.results.forEach(item => {
+                        const li = document.createElement('li');
+                        const a = document.createElement('a');
+                        a.href = `https://www.discogs.com/release/${item.id}`;
+                        a.textContent = `${item.title} (${item.year || 'Unknown year'})`;
+                        a.target = "_blank";
+                        a.rel = "noopener noreferrer";
+                        a.style.color = "white";
+                        li.appendChild(a);
+                        resultsList.appendChild(li);
+                    });
+                } else {
+                    resultsList.innerHTML = 'No results found.';
+                }
+            } catch (error) {
+                resultsList.innerHTML = 'Error fetching data.';
+                console.error(error);
+            }
+        }
+
+        function generateQRCode() {
+            var userInput = document.getElementById('inputs').value;
+            document.getElementById('qrcode').innerHTML = "";
+            if (userInput) {
+                var qrcode = new QRCode(document.getElementById("qrcode"), userInput);
+            }
+        }
+    </script>
+</body>
+</html>
