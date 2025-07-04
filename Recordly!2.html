@@ -1,0 +1,96 @@
+<!--made by chuck the goat, spent around 5 hours and more on this, restearted it bout 3 times just to make sure it was perfect, i used ai because i wanted to do things that are so specific that youtube dosent have it, i made sure that i understood everything and of this file everything was typed and nothing was copy and pasted exept my API, thank you and enjoy Recordly 1.5-->
+<link href='https://fonts.googleapis.com/css?family=Gluten' rel='stylesheet'> <!--Gluten font that i use for EVERYTHING-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script> <!--QR code generator in a js library-->
+<head>
+<title>Recordly!</title> <!--name of the tab-->
+</head>
+<style>
+input::placeholder {
+color: black;
+}
+
+</style>
+<body>
+<img src="record-logo.png" style="position: fixed;top: -40;left: 0;width: 400px;height: auto;z-index: 1000;">
+<p class="Title" style="font-family: 'Gluten';font-size: 70px;color: black;text-align: center;">Recordly!</p> <!--basicaly the H1 at the top middle-->
+<input type="text" placeholder="label, year, artist, ect" class="record-input" oninput="search()" id="searchInput" style="height: 40px;width: 300px;text-align: center;position: fixed;left: 50%;transform: translateX(-50%);box-sizing: border-box;background-color: rgba(128, 128, 128, 0.8);font-family: 'Gluten', sans-serif;border: 1px solid #ccc;border-radius: 20px;font-size: 20px;"> <!--input a record name and it gives a list using the API-->
+<ul id="results" class="links" style="margin-top: 300px;margin-left: 500px; font-family: 'Gluten';"></ul> <!--shows all of the records-->
+<div id="popup" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgb(98, 155, 255); padding: 20px; border-radius: 10px; z-index:1000;"> <!--pop up with qr code! :)-I-< -->
+<div id="popup-qrcode"></div> <!--qr code in the popup-->
+<p id="popup-title" style="font-family: 'Gluten';"></p>
+<button onclick="closePopup()" style="margin: 10px; border-radius: 20px; font-family: 'Gluten';font-size: 30px;">close</button> <!--close popup-->
+</div>
+<a href="https://www.facebook.com/charles.rohde.615952?mibextid=wwXIfr&rdid=ANtOIghXcqQMTXZQ&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1AbDPy1VuQ%2F%3Fmibextid%3DwwXIfr#">
+<img src="facebook.png" style="width: 100; height: auto; position: fixed; margin-top: -300px; margin-left: 1300px;">
+</a>
+<a href="https://discord.gg/GcR7qfuq">
+<img src="discord.png" style="width: 80px; height: auto; position: fixed; margin-top: -290px; margin-left: 1200px;">
+</a>
+</body>
+<script>
+let currentLink = '';
+let currentTitle = '';
+const token = 'LONsRzJDFSLAyHnlzYqYpOvoQQiMrkYTHnzEEuAD';
+let timeoutId;
+async function search() {
+clearTimeout(timeoutId);
+timeoutId = setTimeout(() => {
+const input = document.getElementById('searchInput').value.trim();
+const results = document.getElementById('results');
+if (!input) {
+results.innerHTML = '';
+return;
+}
+const url = `https://api.discogs.com/database/search?q=${encodeURIComponent(input)}&type=release&token=${token}&per_page=100`;
+fetch(url)
+.then(res => res.json())
+.then(data => {
+results.innerHTML = '';
+if (!data.results || data.results.length === 0) {
+results.innerHTML = 'no results found';
+return;
+}
+data.results.forEach(item => {
+const li = document.createElement('li');
+li.innerHTML = `<a href="#" onclick="showPopup('https://www.discogs.com/release/${item.id}', '${item.title.replace(/'/g, "\\'")}', '${item.cover_image}', '${item.year || 'Unknown Year'}')" style="color:blue">
+${item.title} (${item.year || 'Unknown year'})
+</a>`;
+results.appendChild(li);
+});
+})
+.catch(() => {
+results.innerHTML = 'error loading results';
+});
+}, 400);
+}
+
+function showPopup(link, title, imageUrl, year) {
+currentLink = link;
+currentTitle = title;
+const popup = document.getElementById('popup');
+const qrDiv = document.getElementById('popup-qrcode');
+qrDiv.innerHTML = '';
+new QRCode(qrDiv, {
+text: link,
+width: 200,
+height: 200
+});
+document.getElementById('popup-title').innerText = `${title} (${year})`;
+// Set the title under the QR
+// Show the popup
+if (imageUrl) {
+const img = document.createElement('img');
+img.src = imageUrl;
+img.style.maxWidth = '200px';
+img.style.marginTop = '10px';
+qrDiv.appendChild(img);
+}
+popup.style.display = 'block';
+}
+
+function closePopup() {
+  // Hide the popup
+  document.getElementById('popup').style.display = 'none';
+}
+
+</script>
