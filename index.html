@@ -93,7 +93,7 @@ background-color: white; padding: 20px; border-radius: 15px; font-family: 'Glute
           data.results.forEach(item => {
             const li = document.createElement('li');
             console.log(item);
-            li.innerHTML = `<a href="#" onclick="showPopup('https://www.discogs.com/release/${item.id}', '${item.title.replace(/'/g, "\\'")}', '${item.cover_image}')" style="color:blue">
+            li.innerHTML = `<a href="#" onclick="showPopup('https://www.discogs.com/release/${item.id}', '${item.title.replace(/'/g, "\\'")}', '${item.cover_image}')" style="color: black;">
 ${item.title} (${item.year || 'Unknown year'})
 </a>`;
             results.appendChild(li);
