@@ -58,11 +58,14 @@
       style="margin: 10px; border-radius: 20px; font-family: 'Gluten';font-size: 30px;">close</button>
     <!--close popup-->
   </div>
-<div id='popup2'>
-<p>the reason i made recordly was to allow people to learn more about the records they own and allow people viewing the records be able to scan a qr code and seee all about the record such as price, year, name, artist, ect. below are the links to what could be needed for recordly(you also need a printer)</p>
-<p></p>
+<div id="popup2" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+background-color: white; padding: 20px; border-radius: 15px; font-family: 'Gluten'; z-index: 1000;">
+  <p>
+    the reason i made recordly was to allow people to learn more about the records they own and allow people viewing the records be able to scan a qr code and seee all about the record such as price, year, name, artist, ect. below are the links to what could be needed for recordly (you also need a printer)
+  </p>
+  <button onclick="closePopup2()" style="margin-top: 10px; border-radius: 10px; font-family: 'Gluten';">close</button>
 </div>
-<button onclick='showpopup2()'>learn more</button>
+<button onclick="showpopup2()">learn more</button>
 </body>
 <script>
   let currentLink = '';
