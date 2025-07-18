@@ -1,80 +1,98 @@
-<!--made by chuck the goat, spent around 5 hours and more on this, restearted it bout 3 times just to make sure it was perfect, i used ai because i wanted to do things that are so specific that youtube dosent have it, i made sure that i understood everything and of this file everything was typed and nothing was copy and pasted exept my API, thank you and enjoy Recordly 1.5-->
-<!--  chuck, why do you not format literally anything in your code? i literally wanted to add more info to the popups and i formatted everything bc it was unreadable - jordan  -->
-<link href='https://fonts.googleapis.com/css?family=Gluten' rel='stylesheet'>
-<!--Gluten font that i use for EVERYTHING-->
+<!-- made by chuck the goat -->
+<!-- jordan formatted it because chuck styles everything inline 💀 -->
+<link href="https://fonts.googleapis.com/css?family=Gluten" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<!--QR code generator in a js library-->
 
 <head>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1149296688982018"
-     crossorigin="anonymous"></script>
-  <title>Recordly!</title> <!--name of the tab-->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1149296688982018"
+    crossorigin="anonymous"></script>
+  <title>Recordly!</title>
 </head>
+
 <style>
   input::placeholder {
     color: black;
   }
-  /* chuck, istg if you dont start using css IN THE STYLE THING im gonna be unhappy >:( */
+
   .centerstuffwhydoyoustyleeverythinginthedivcharlie {
     display: flex;
     flex-direction: column;
-    align-items: center; /* horizontal center */
-    justify-content: center; /* vertical center (if needed) */
+    align-items: center;
     text-align: center;
   }
 </style>
 
 <body style="background-color: #9ec3ff;">
-<div style="position: fixed; top: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 1000; background-color: #ffffffb2; border-radius: 40px; border: 4px solid black">
-  <a href="https://www.facebook.com/charles.rohde.615952?mibextid=wwXIfr">
-    <img src="facebook.png" alt="Facebook" style="width: 60px; height: auto;">
-  </a>
-  <a href="https://discord.gg/GcR7qfuq">
-    <img src="discord.png" alt="Discord" style="width: 60px; height: auto;">
-  </a>
-</div>
-  <!-- <img src="record-logo.png" style="position: fixed;top: -40;left: 0;width: 400px;height: auto;z-index: 1000;"> -->
-  <div class="centerstuffwhydoyoustyleeverythinginthedivcharlie"><img src="logo2.png" style="width: 400px;height: auto;text-align: center;"></div>
-  <br>
-  <!-- <p class="Title" style="font-family: 'Gluten';font-size: 70px;color: black;text-align: center;">Recordly!</p> <<-- I DONT GET THIS WHY YOU HAVE A LOGO --> 
-  <!--basicaly the H1 at the top middle-->
-  <input type="text" placeholder="label, year, artist, ect" class="record-input" oninput="search()" id="searchInput"
-    style="height: 40px;width: 51%;text-align: center;position: absolute;left: 49.5%;transform: translateX(-50%);box-sizing: border-box;background-color: #ffffffb2;font-family: 'Gluten', sans-serif;border: 2px solid black;border-radius: 5px;font-size: 20px;">
-  <!--input a record name and it gives a list using the API-->
-  <br><br>
-  <ul id="results" class="links centerstuffwhydoyoustyleeverythinginthedivcharlie" style="margin-left: 23%; font-family: 'Gluten'; background-color: #ffffffb2; width: 50%; border-radius: 5px; border: 4px solid black"></ul>
-  <!--shows all of the records-->
-<div id="recordly-intro" style="font-family: 'Gluten'; color: black; text-align: center; margin-top: 30px; margin-left: 23%; width: 50%; background-color: #ffffffb2; border-radius: 5px; padding: 20px; border: 4px solid black;">
-  <h2>Welcome to Recordly Studios!</h2>
-  <p>My name is Chuck. Recordly is a website that I’ve put a lot of effort into and I’m very proud of.</p>
-  <p>I originally made this for my grandpa, but now I have hopes of giving this website to the whole world — completely free.</p>
-  <p>Recordly is a site designed to preserve your records forever. Just look up your record, and we’ll give you a QR code for it.</p>
-  <p>Print the QR code and stick it on the record — when scanned, it’ll show info about the record and what it’s worth.</p>
-  <p>In the future, we hope to add even more, like a built-in record scanner.</p>
-  <p>The best YOU can do? Join our Discord and leave a review. Enjoy!</p>
-  <p style="color: #b3a400;">DISCLAIMER --> you need to click the song to make the QR-Code Pop up.</p>
-</div>
 
-  <div id="popup"
-    class="centerstuffwhydoyoustyleeverythinginthedivcharlie"
+  <!-- social media links in a bubble -->
+  <div style="position: fixed; top: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 1000; background-color: #ffffffb2; border-radius: 40px; border: 4px solid black">
+    <a href="https://www.facebook.com/charles.rohde.615952?mibextid=wwXIfr">
+      <img src="facebook.png" alt="Facebook" style="width: 60px;">
+    </a>
+    <a href="https://discord.gg/GcR7qfuq">
+      <img src="discord.png" alt="Discord" style="width: 60px;">
+    </a>
+  </div>
+
+  <!-- logo -->
+  <div class="centerstuffwhydoyoustyleeverythinginthedivcharlie">
+    <img src="logo2.png" style="width: 400px;" alt="Recordly Logo">
+  </div>
+
+  <!-- search bar -->
+  <input type="text" placeholder="label, year, artist, ect" class="record-input" oninput="search()" id="searchInput"
+    style="height: 40px; width: 51%; text-align: center; position: absolute; left: 49.5%; transform: translateX(-50%); box-sizing: border-box; background-color: #ffffffb2; font-family: 'Gluten'; border: 2px solid black; border-radius: 5px; font-size: 20px;">
+
+  <br><br>
+
+  <!-- result list -->
+  <ul id="results" class="links centerstuffwhydoyoustyleeverythinginthedivcharlie"
+    style="margin-left: 23%; font-family: 'Gluten'; background-color: #ffffffb2; width: 50%; border-radius: 5px; border: 4px solid black;"></ul>
+
+  <!-- intro text -->
+  <div id="recordly-intro"
+    style="font-family: 'Gluten'; color: black; text-align: center; margin-top: 30px; margin-left: 23%; width: 50%; background-color: #ffffffb2; border-radius: 5px; padding: 20px; border: 4px solid black;">
+    <h2>Welcome to Recordly Studios!</h2>
+    <p>My name is Chuck. Recordly is a website that I’ve put a lot of effort into and I’m very proud of.</p>
+    <p>I originally made this for my grandpa, but now I have hopes of giving this website to the whole world — completely free.</p>
+    <p>Recordly is a site designed to preserve your records forever. Just look up your record, and we’ll give you a QR code for it.</p>
+    <p>Print the QR code and stick it on the record — when scanned, it’ll show info about the record and what it’s worth.</p>
+    <p>In the future, we hope to add even more, like a built-in record scanner.</p>
+    <p>The best YOU can do? Join our Discord and leave a review. Enjoy!</p>
+    <p style="color: #b3a400;">DISCLAIMER --> you need to click the song to make the QR-Code Pop up.</p>
+
+    <!-- ✅ AdSense block here -->
+    <ins class="adsbygoogle"
+         style="display:block; margin-top: 20px;"
+         data-ad-client="ca-pub-1149296688982018"
+         data-ad-slot="YOUR-AD-SLOT-ID"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+
+  <!-- popup -->
+  <div id="popup" class="centerstuffwhydoyoustyleeverythinginthedivcharlie"
     style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: #ffffff; border:4px solid black; padding: 20px; border-radius: 5px; z-index:1000;">
-    <!--pop up with qr code! :)-I-< -->
-    <img src="" width="96" height="96" id="popup-cover">
+    <img src="" width="96" height="96" id="popup-cover" alt="Record Cover">
     <p id="popup-title" style="font-family: 'Gluten';"></p>
-    <div id="popup-qrcode" class="centerstuffwhydoyoustyleeverythinginthedivcharlie"></div> <!--qr code in the popup-->
+    <div id="popup-qrcode" class="centerstuffwhydoyoustyleeverythinginthedivcharlie"></div>
     <br>
     <a href="" id="popup-link" style="font-family: 'Gluten';"></a>
     <br>
-    <button onclick="closePopup()"
-      style="margin: 10px; border-radius: 20px; font-family: 'Gluten';font-size: 30px;">close</button>
-    <!--close popup-->
+    <button onclick="closePopup()" style="margin: 10px; border-radius: 20px; font-family: 'Gluten'; font-size: 30px;">close</button>
   </div>
 </body>
+
+<!-- main logic -->
 <script>
   let currentLink = '';
   let currentTitle = '';
-  const token = 'LONsRzJDFSLAyHnlzYqYpOvoQQiMrkYTHnzEEuAD'; // this SURELY isn't a vulnerability
+  const token = 'LONsRzJDFSLAyHnlzYqYpOvoQQiMrkYTHnzEEuAD';
   let timeoutId;
+
   async function search() {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => {
@@ -95,10 +113,9 @@
           }
           data.results.forEach(item => {
             const li = document.createElement('li');
-            console.log(item);
             li.innerHTML = `<a href="#" onclick="showPopup('https://www.discogs.com/release/${item.id}', '${item.title.replace(/'/g, "\\'")}', '${item.cover_image}')" style="color: black;">
-${item.title} (${item.year || 'Unknown year'})
-</a>`;
+              ${item.title} (${item.year || 'Unknown year'})
+            </a>`;
             results.appendChild(li);
           });
         })
@@ -119,25 +136,15 @@ ${item.title} (${item.year || 'Unknown year'})
       width: 200,
       height: 200
     });
-    // Set the title, the cover image, and the link shown under the QR code
     document.getElementById('popup-cover').src = coverImg;
     document.getElementById('popup-title').innerText = title;
-    document.getElementById('popup-link').innerText = link; document.getElementById('popup-link').href = link;
-    // Show the popup
+    document.getElementById('popup-link').innerText = link;
+    document.getElementById('popup-link').href = link;
     popup.style.display = 'block';
   }
 
   function closePopup() {
-    // Hide the popup
     document.getElementById('popup').style.display = 'none';
   }
-function showpopup2() {
-  const popup = document.getElementById('popup2');
-  popup.style.display = 'block';
-}
-
-function closePopup2() {
-  const popup = document.getElementById('popup2');
-  popup.style.display = 'none';
-}
 </script>
+
