@@ -1,6 +1,6 @@
 <!-- made by chuck the goat -->
 <!-- jordan formatted it because chuck styles everything inline 💀 -->
-<!-- chuck: jor jor is just mad >:# -->
+<!--chuck: jor jor is just mad >:#-->
 <link href="https://fonts.googleapis.com/css?family=Gluten" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <link href="https://fonts.cdnfonts.com/css/steiner" rel="stylesheet">
@@ -23,31 +23,9 @@
     align-items: center;
     text-align: center;
   }
-
-  .record-card {
-    font-size: 20px;
-    font-weight: 900;
-    font-family: 'Univers';
-    color: black;
-    text-align: center;
-    background-color: #ffffffb2;
-    border-radius: 5px;
-    padding: 20px;
-    border: 4px solid black;
-  }
-
-  .logo {
-    width: 600px;
-    max-width: 100%;
-  }
-
-  body {
-    background-color: #c2ddff;
-    font-family: 'Univers', sans-serif;
-  }
 </style>
 
-<body>
+<body style="background-color: #c2ddff;">
 
   <!-- social media links in a bubble -->
   <div style="position: fixed; top: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 1000; background-color: #ffffffb2; border-radius: 40px; border: 4px solid black">
@@ -59,41 +37,59 @@
     </a>
   </div>
 
-  <!-- logo -->
-  <div class="centerstuffwhydoyoustyleeverythinginthedivcharlie" style="margin-top: 30px;">
-    <img src="skib.png" class="logo" alt="Recordly Logo">
+  <div style="
+    font-size: 20px;
+    font-weight: 900;
+    font-family: 'Univers';
+    color: black;
+    text-align: center;
+    margin: 30px auto;
+    max-width: 800px;
+    background-color: #ffffffb2;
+    border-radius: 5px;
+    padding: 20px;
+    border: 4px solid black;
+  ">
+
+    <!-- logo -->
+    <div class="centerstuffwhydoyoustyleeverythinginthedivcharlie">
+      <img src="skib.png" style="width: 600px;" alt="Recordly Logo">
+    </div>
+
+    <!-- search bar -->
+    <input type="text" placeholder="label, year, artist, ect" class="record-input" oninput="search()" id="searchInput"
+      style="height: 40px; width: 51%; text-align: center; position: absolute; left: 49.5%; transform: translateX(-50%); box-sizing: border-box; background-color: #ffffffb2; font-family: 'Univers', sans-serif; border: 2px solid black; border-radius: 5px; font-size: 20px;">
+
+    <br><br>
+
+    <!-- result list -->
+    <ul id="results" class="links centerstuffwhydoyoustyleeverythinginthedivcharlie"
+      style="margin-left: 23%; font-family: 'Univers'; font-size:30px; background-color: #ffffffb2; width: 50%; border-radius: 5px; border: 4px solid black;"></ul>
+
+    <!-- intro text -->
+    <div id="recordly-intro"
+      style="font-size: 20px; font-weight: 900; font-family: 'Univers', sans-serif; color: black; text-align: center; margin-top: 30px; margin-left: 23%; width: 50%; background-color: #ffffffb2; border-radius: 5px; padding: 20px; border: 4px solid black;">
+      <h2>Welcome to Recordly Studios!</h2>
+      <p><b>My name is Chuck. Recordly is a website that I’ve put a lot of effort into and I’m very proud of.</b></p>
+      <p>I originally made this for my grandpa, but now I have hopes of giving this website to the whole world — completely free.</p>
+      <p>Recordly is a site designed to preserve your records forever. Just look up your record, and we’ll give you a QR code for it.</p>
+      <p>Print the QR code and stick it on the record — when scanned, it’ll show info about the record and what it’s worth.</p>
+      <p>In the future, we hope to add even more, like a built-in record scanner.</p>
+      <p>The best YOU can do? Join our Discord and leave a review. Enjoy!</p>
+      <p style="color: #b3a400;">DISCLAIMER --> you need to click the song to make the QR-Code Pop up.</p>
+    </div>
+
+    <!-- ✅ AdSense block -->
+    <ins class="adsbygoogle"
+         style="display:block; margin-top: 20px;"
+         data-ad-client="ca-pub-1149296688982018"
+         data-ad-slot="YOUR-AD-SLOT-ID"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
   </div>
-
-  <!-- search bar -->
-  <input type="text" placeholder="label, year, artist, etc" class="record-input" oninput="search()" id="searchInput"
-    style="height: 40px; width: 50%; text-align: center; display: block; margin: 30px auto; background-color: #ffffffb2; font-family: 'Univers', sans-serif; border: 2px solid black; border-radius: 5px; font-size: 20px;">
-
-  <!-- result list -->
-  <ul id="results" class="links centerstuffwhydoyoustyleeverythinginthedivcharlie record-card"
-    style="width: 50%; margin: 20px auto;"></ul>
-
-  <!-- intro text -->
-  <div id="recordly-intro" class="record-card" style="width: 50%; margin: 20px auto;">
-    <h2>Welcome to Recordly Studios!</h2>
-    <p><b>My name is Chuck. Recordly is a website that I’ve put a lot of effort into and I’m very proud of.</b></p>
-    <p>I originally made this for my grandpa, but now I have hopes of giving this website to the whole world — completely free.</p>
-    <p>Recordly is a site designed to preserve your records forever. Just look up your record, and we’ll give you a QR code for it.</p>
-    <p>Print the QR code and stick it on the record — when scanned, it’ll show info about the record and what it’s worth.</p>
-    <p>In the future, we hope to add even more, like a built-in record scanner.</p>
-    <p>The best YOU can do? Join our Discord and leave a review. Enjoy!</p>
-    <p style="color: #b3a400;">DISCLAIMER --> you need to click the song to make the QR-Code Pop up.</p>
-  </div>
-
-  <!-- ✅ AdSense block -->
-  <ins class="adsbygoogle"
-       style="display:block; margin: 20px auto; text-align: center;"
-       data-ad-client="ca-pub-1149296688982018"
-       data-ad-slot="YOUR-AD-SLOT-ID"
-       data-ad-format="auto"
-       data-full-width-responsive="true"></ins>
-  <script>
-    (adsbygoogle = window.adsbygoogle || []).push({});
-  </script>
 
   <!-- popup -->
   <div id="popup" class="centerstuffwhydoyoustyleeverythinginthedivcharlie"
@@ -101,7 +97,8 @@
     <img src="" width="96" height="96" id="popup-cover" alt="Record Cover">
     <div id="popup-qrcode" class="centerstuffwhydoyoustyleeverythinginthedivcharlie"></div>
     <p id="popup-title" style="font-family: 'Univers'; font-size: 20px; font-weight: bold; margin: 10px;"></p>
-    <a href="" id="popup-link" style="font-family: 'Univers'; word-break: break-word;"></a>
+    <br>
+    <a href="" id="popup-link" style="font-family: 'Univers';"></a>
     <br>
     <button onclick="closePopup()" style="margin: 10px; border-radius: 20px; font-family: 'Univers'; font-size: 30px;">close</button>
   </div>
@@ -114,7 +111,7 @@
   const token = 'LONsRzJDFSLAyHnlzYqYpOvoQQiMrkYTHnzEEuAD';
   let timeoutId;
 
-  async function search() {
+  function search() {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => {
       const input = document.getElementById('searchInput').value.trim();
@@ -168,4 +165,3 @@
     document.getElementById('popup').style.display = 'none';
   }
 </script>
-
