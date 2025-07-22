@@ -137,7 +137,11 @@ const input = cleanInput(rawInput);
         return;
       }
       const url = `https://api.discogs.com/database/search?q=${encodeURIComponent(input)}&type=release&token=${token}&per_page=100`;
-      fetch(url)
+      fetch(url, {
+  headers: {
+    'User-Agent': 'RecordlyApp/1.0 +https://yourwebsite.com'
+  }
+})
         .then(res => res.json())
         .then(data => {
           results.innerHTML = '';
