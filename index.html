@@ -116,6 +116,16 @@
   const token = 'LONsRzJDFSLAyHnlzYqYpOvoQQiMrkYTHnzEEuAD';
   let timeoutId;
 
+  function cleanInput(input) {
+    return input
+      .replace(/[^\w\s\-:]/g, '')        // remove weird symbols
+      .toLowerCase()                     // normalize case
+      .split(/\s+/)                      // split into words
+      .filter(word => word.length > 2)   // ignore tiny words like "of", "by"
+      .slice(0, 10)                      // limit to 10 words to avoid overload
+      .join(' ');
+  }
+
   function search() {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => {
