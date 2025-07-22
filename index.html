@@ -119,7 +119,8 @@
   function search() {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => {
-      const input = document.getElementById('searchInput').value.trim();
+const rawInput = document.getElementById('searchInput').value.trim();
+const input = cleanInput(rawInput);
       const results = document.getElementById('results');
       if (!input) {
         results.innerHTML = '';
