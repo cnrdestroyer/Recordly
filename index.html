@@ -174,9 +174,16 @@ const url = `https://api.discogs.com/database/search?q=${encodeURIComponent(inpu
 
     for (const item of allResults.values()) {
       const li = document.createElement('li');
-      li.innerHTML = `<a href="#" onclick="showPopup('https://www.discogs.com/release/${item.id}', '${item.title.replace(/'/g, "\\'")}', '${item.cover_image}')" style="color: black;">
-        ${item.title} (${item.year || 'Unknown year'})
-      </a>`;
+li.innerHTML = `
+  <a href="#" onclick="showPopup('https://www.discogs.com/release/${item.id}', '${item.title.replace(/'/g, "\\'")}', '${item.cover_image}')" style="color: black; display: flex; align-items: center; gap: 10px; text-decoration: none;">
+    <img src="${item.cover_image}" alt="cover" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
+    <div>
+      <strong>${item.title}</strong><br>
+      ${item.year || 'Unknown year'}
+    </div>
+  </a>
+`;
+
       results.appendChild(li);
     }
   }, 400);
