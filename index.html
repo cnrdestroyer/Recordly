@@ -146,7 +146,7 @@ async function search() {
     results.innerHTML = 'searching...';
 
     for (const word of keywords.slice(0, 10)) { // search only first 10 keywords to not hammer the API
-      const url = `https://api.discogs.com/database/search?q=${encodeURIComponent(word)}&type=release&token=${token}&per_page=5`;
+const url = `https://api.discogs.com/database/search?q=${encodeURIComponent(input)}&type=release&exact=1&token=${token}&per_page=100`;
       try {
         const res = await fetch(url, {
           headers: {
