@@ -179,6 +179,7 @@ li.innerHTML = `
     <img src="${item.cover_image}" alt="cover" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
     <div>
       <strong>${item.title}</strong><br>
+      <span style="font-size: 0.9em; color: gray;">Catalog #: ${item.catno || 'N/A'}</span>
       ${item.year || 'Unknown year'}
     </div>
   </a>
