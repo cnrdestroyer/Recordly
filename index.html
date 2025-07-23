@@ -116,52 +116,71 @@
   const token = 'MWixCACGWmTZfcAKaPdsxoDVAFOjlWDcsQMXadkS';
   let timeoutId;
 
-  function cleanInput(input) {
-    return input
-      .replace(/[^\w\s\-:]/g, '')        // remove weird symbols
-      .toLowerCase()                     // normalize case
-      .split(/\s+/)                      // split into words
-      .filter(word => word.length > 2)   // ignore tiny words like "of", "by"
-      .slice(0, 50)                      // limit to 10 words to avoid overload
-      .join(' ');
-  }
+function cleanInput(input) {
+  return input
+    .replace(/[^\w\s-:]/g, '')           // remove weird symbols but keep colons & dashes
+    .replace(/([a-z])([A-Z])/g, '$1 $2') // fixCamelCaseToSpaces
+    .replace(/\s{2,}/g, ' ')             // collapse multiple spaces
+    .toLowerCase()                      // lowercase for consistency
+    .split(/\s+/)                       // split into individual words
+    .map(word => word.trim())           // clean each word
+    .filter(word => word.length > 2)    // ignore short/filler words like "a", "by"
+    .slice(0, 50)                        // keep up to 50 words just in case
+    .join(' ');
+}
 
-  function search() {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => {
-const rawInput = document.getElementById('searchInput').value.trim();
-const input = cleanInput(rawInput);
-      const results = document.getElementById('results');
-      if (!input) {
-        results.innerHTML = '';
-        return;
-      }
-      const url = `https://api.discogs.com/database/search?q=${encodeURIComponent(input)}&type=release&token=${token}&per_page=100`;
-      fetch(url, {
-  headers: {
-    'User-Agent': 'RecordlyApp/1.0 +https://recordly.pro'
-  }
-})
-        .then(res => res.json())
-        .then(data => {
-          results.innerHTML = '';
-          if (!data.results || data.results.length === 0) {
-            results.innerHTML = 'no results found';
-            return;
+async function search() {
+  clearTimeout(timeoutId);
+  timeoutId = setTimeout(async () => {
+    const rawInput = document.getElementById('searchInput').value.trim();
+    const input = cleanInput(rawInput);
+    const keywords = input.split(' ');
+    const results = document.getElementById('results');
+
+    if (keywords.length === 0) {
+      results.innerHTML = '';
+      return;
+    }
+
+    const allResults = new Map();
+    results.innerHTML = 'searching...';
+
+    for (const word of keywords.slice(0, 10)) { // search only first 10 keywords to not hammer the API
+      const url = `https://api.discogs.com/database/search?q=${encodeURIComponent(word)}&type=release&token=${token}&per_page=5`;
+      try {
+        const res = await fetch(url, {
+          headers: {
+            'User-Agent': 'RecordlyApp/1.0 +https://recordly.pro'
           }
-          data.results.forEach(item => {
-            const li = document.createElement('li');
-            li.innerHTML = `<a href="#" onclick="showPopup('https://www.discogs.com/release/${item.id}', '${item.title.replace(/'/g, "\\'")}', '${item.cover_image}')" style="color: black;">
-              ${item.title} (${item.year || 'Unknown year'})
-            </a>`;
-            results.appendChild(li);
-          });
-        })
-        .catch(() => {
-          results.innerHTML = 'error loading results';
         });
-    }, 400);
-  }
+        const data = await res.json();
+        if (data.results) {
+          data.results.forEach(item => {
+            if (!allResults.has(item.id)) {
+              allResults.set(item.id, item);
+            }
+          });
+        }
+      } catch (err) {
+        console.error('search failed:', err);
+      }
+    }
+
+    results.innerHTML = '';
+    if (allResults.size === 0) {
+      results.innerHTML = 'no results found';
+      return;
+    }
+
+    for (const item of allResults.values()) {
+      const li = document.createElement('li');
+      li.innerHTML = `<a href="#" onclick="showPopup('https://www.discogs.com/release/${item.id}', '${item.title.replace(/'/g, "\\'")}', '${item.cover_image}')" style="color: black;">
+        ${item.title} (${item.year || 'Unknown year'})
+      </a>`;
+      results.appendChild(li);
+    }
+  }, 400);
+}
 
   function showPopup(link, title, coverImg) {
     currentLink = link;
