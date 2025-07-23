@@ -122,7 +122,7 @@
       .toLowerCase()                     // normalize case
       .split(/\s+/)                      // split into words
       .filter(word => word.length > 2)   // ignore tiny words like "of", "by"
-      .slice(0, 10)                      // limit to 10 words to avoid overload
+      .slice(0, 50)                      // limit to 10 words to avoid overload
       .join(' ');
   }
 
