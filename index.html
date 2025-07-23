@@ -114,7 +114,6 @@
 <script>
   let currentLink = '';
   let currentTitle = '';
-  const token = document.getElementById('apiTokenInput').value.trim();;
   let timeoutId;
 
 function cleanInput(input) {
@@ -131,6 +130,11 @@ function cleanInput(input) {
 }
 
 async function search() {
+  const token = document.getElementById('apiTokenInput').value.trim();
+if (!token) {
+  document.getElementById('results').innerHTML = 'Please enter your Discogs API token above!';
+  return;
+}
   clearTimeout(timeoutId);
   timeoutId = setTimeout(async () => {
     const rawInput = document.getElementById('searchInput').value.trim();
