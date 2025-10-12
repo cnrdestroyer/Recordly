@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Teacher Browser (HTML-only)</title>
+<style>
+  :root { --toolbar-h:64px; --accent:#1976d2; --bg:#f7f7f8; }
+  html,body { height:100%; margin:0; font-family:Inter, Roboto, system-ui, Arial; background:var(--bg); }
+  #top { height:var(--toolbar-h); display:flex; align-items:center; gap:8px; padding:8px 12px; box-shadow:0 1px 0 rgba(0,0,0,.06); background:white; }
+  button { border:1px solid rgba(0,0,0,.08); background:white; padding:8px 10px; border-radius:6px; cursor:pointer; }
+  button:active{ transform:translateY(1px); }
+  input#address { flex:1; padding:8px 10px; border-radius:6px; border:1px solid rgba(0,0,0,.08); font-size:14px; }
+  #tabs { display:flex; gap:6px; padding:8px 12px; overflow-x:auto; background:linear-gradient(to bottom, white, #fafafa); border-bottom:1px solid rgba(0,0,0,.03); }
+  .tab { padding:8px 12px; border-radius:8px; background:transparent; display:flex; gap:8px; align-items:center; white-space:nowrap; border:1px solid transparent; cursor:pointer; }
+  .tab.active { background:var(--accent); color:white; border-color:rgba(0,0,0,.06); }
+  .tab .close { background:transparent; border:none; color:inherit; font-weight:700; cursor:pointer; padding:0 6px; }
+  #content { height: calc(100% - var(--toolbar-h) - 56px); } /* 56 = tabs height approx */
+  .webframe { width:100%; height:100%; border:0; display:none; }
+  .webframe.active { display:block; }
+  .small { font-size:13px; color:#444; }
+  .hint { font-size:12px; color:#666; margin-left:8px; }
+  /* responsive minor */
+  @media (max-width:600px) {
+    #top { gap:6px; padding:6px; }
+    button { padding:6px 8px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="top" role="toolbar">
+  <div style="display:flex; gap:6px; align-items:center;">
+    <button id="back" title="Back">◀</button>
+    <button id="forward" title="Forward">▶</button>
+    <button id="reload" title="Reload">⟳</button>
+  </div>
+
+  <input id="address" placeholder="Enter URL (e.g. https://www.youtube.com)"/>
+  <button id="open">Open</button>
+  <button id="newtab" title="New blank tab">＋ Tab</button>
+  <span class="hint small">Built with plain HTML/JS • network blocks still apply</span>
+</div>
+
+<div id="tabs" aria-label="Tabs"></div>
+
+<div id="content"></div>
+
+<script>
+/*
+  Teacher Browser (HTML-only)
+  - Single file, no server, no packages
+  - Tabs are iframes. Navigation initiated via the address bar is recorded in each tab's history stack.
+  - NOTE: Because of cross-origin restrictions, navigations that happen inside the iframe (clicking links on external sites)
+    cannot be reliably observed or controlled by this page. Back/forward will work for navigations initiated through this UI.
+*/
+
+const addressEl = document.getElementById('address');
+const openBtn = document.getElementById('open');
+const newTabBtn = document.getElementById('newtab');
+const backBtn = document.getElementById('back');
+const forwardBtn = document.getElementById('forward');
+const reloadBtn = document.getElementById('reload');
+const tabsEl = document.getElementById('tabs');
+const contentEl = document.getElementById('content');
+
+let tabs = []; // {id, iframeEl, btnEl, history:[], histIndex: int}
+let nextId = 1;
+let activeTabId = null;
+
+/* helpers */
+function makeId(){ return 'tab-' + (nextId++); }
+function extractTitleFromURL(u){
+  try {
+    const parsed = new URL(u);
+    return parsed.hostname.replace('www.','');
+  } catch(e){ return u; }
+}
+function normalizeUrl(input){
+  // quick normalization: if user types "youtube.com" -> add https://
+  if (!input) return '';
+  try {
+    const p = new URL(input);
+    return p.href;
+  } catch(e){
+    // maybe they typed without protocol
+    try {
+      return new URL('https://' + input).href;
+    } catch(e){
+      return input;
+    }
+  }
+}
+
+/* create a tab (optionally with url) */
+function createTab(initialUrl){
+  const id = makeId();
+  const tabBtn = document.createElement('button');
+  tabBtn.className = 'tab';
+  tabBtn.setAttribute('data-id', id);
+
+  const titleSpan = document.createElement('span');
+  titleSpan.textContent = initialUrl ? extractTitleFromURL(initialUrl) : 'New Tab';
+  tabBtn.appendChild(titleSpan);
+
+  const closeBtn = document.createElement('button');
+  closeBtn.className = 'close';
+  closeBtn.title = 'Close tab';
+  closeBtn.innerText = '✕';
+  tabBtn.appendChild(closeBtn);
+
+  tabsEl.appendChild(tabBtn);
+
+  const iframe = document.createElement('iframe');
+  iframe.className = 'webframe';
+  iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-forms allow-popups'); // no top-level navigation control; sandbox is optional
+  iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
+  iframe.setAttribute('title', initialUrl ? initialUrl : 'New Tab');
+  contentEl.appendChild(iframe);
+
+  const tabObj = {
+    id,
+    btnEl: tabBtn,
+    titleEl: titleSpan,
+    iframeEl: iframe,
+    history: [],
+    histIndex: -1
+  };
+  tabs.push(tabObj);
+
+  // event: clicking tab -> switch
+  tabBtn.addEventListener('click', (ev) => {
+    // if click on close button, handled separately
+    if (ev.target === closeBtn) return;
+    switchToTab(id);
+  });
+
+  // close
+  closeBtn.addEventListener('click', (ev) => {
+    ev.stopPropagation();
+    closeTab(id);
+  });
+
+  // load initial url if provided
+  if (initialUrl) {
+    navigateTabTo(id, initialUrl, {record:true});
+  } else {
+    // activate this tab
+    switchToTab(id);
+  }
+
+  return id;
+}
+
+/* switch to tab id */
+function switchToTab(id){
+  // find tab
+  const t = tabs.find(x => x.id === id);
+  if (!t) return;
+  // deactivate others
+  tabs.forEach(x => {
+    x.btnEl.classList.toggle('active', x.id === id);
+    x.iframeEl.classList.toggle('active', x.id === id);
+  });
+  activeTabId = id;
+  // set address bar to current URL for that tab, if known
+  if (t.histIndex >= 0 && t.history[t.histIndex]) {
+    addressEl.value = t.history[t.histIndex];
+  } else {
+    addressEl.value = '';
+  }
+  updateNavButtons();
+}
+
+/* close tab */
+function closeTab(id){
+  const idx = tabs.findIndex(x => x.id === id);
+  if (idx === -1) return;
+  const t = tabs[idx];
+  t.iframeEl.remove();
+  t.btnEl.remove();
+  tabs.splice(idx,1);
+  if (activeTabId === id) {
+    // pick a neighbor tab to activate
+    if (tabs.length) {
+      const newIdx = Math.max(0, idx-1);
+      switchToTab(tabs[newIdx].id);
+    } else {
+      // no tabs left -> create a blank tab
+      const newId = createTab();
+      switchToTab(newId);
+    }
+  }
+}
+
+/* navigate a tab to url
+   options: {record: boolean} - whether to push into that tab's history stack (true when navigation initiated by UI)
+*/
+function navigateTabTo(id, rawUrl, options = {record:true}){
+  const t = tabs.find(x => x.id === id);
+  if (!t) return;
+  const url = normalizeUrl(rawUrl);
+  // set iframe src
+  t.iframeEl.src = url;
+  t.iframeEl.setAttribute('title', url);
+  // update title text
+  t.titleEl.textContent = extractTitleFromURL(url);
+
+  if (options.record) {
+    // if we navigated after going back (histIndex not at end), truncate forward history
+    if (t.histIndex < t.history.length - 1) {
+      t.history = t.history.slice(0, t.histIndex + 1);
+    }
+    t.history.push(url);
+    t.histIndex = t.history.length - 1;
+  }
+
+  // when switching to this tab, address bar should show current
+  if (activeTabId === id) addressEl.value = url;
+  updateNavButtons();
+}
+
+/* go back/forward functionality (based on our saved history for each tab)
+   NOTE: this only reflects navigations initiated through this UI (address bar or open buttons).
+   If the user clicks links inside the iframe on other domains, we can't reliably see those navs due to cross-origin rules.
+*/
+function goBackInTab(id){
+  const t = tabs.find(x => x.id === id);
+  if (!t) return;
+  if (t.histIndex > 0) {
+    t.histIndex -= 1;
+    const url = t.history[t.histIndex];
+    // load without recording (we're moving through history)
+    navigateTabTo(id, url, {record:false});
+  }
+}
+function goForwardInTab(id){
+  const t = tabs.find(x => x.id === id);
+  if (!t) return;
+  if (t.histIndex < t.history.length - 1) {
+    t.histIndex += 1;
+    const url = t.history[t.histIndex];
+    navigateTabTo(id, url, {record:false});
+  }
+}
+
+/* reload current tab */
+function reloadCurrent(){
+  const t = tabs.find(x => x.id === activeTabId);
+  if (!t) return;
+  // trick: reset src to itself -> reload
+  const cur = (t.histIndex >= 0 && t.history[t.histIndex]) ? t.history[t.histIndex] : t.iframeEl.src;
+  t.iframeEl.src = cur;
+}
+
+/* update nav button enable/disable */
+function updateNavButtons(){
+  const t = tabs.find(x => x.id === activeTabId);
+  if (!t) {
+    backBtn.disabled = true;
+    forwardBtn.disabled = true;
+    reloadBtn.disabled = true;
+    return;
+  }
+  backBtn.disabled = !(t.histIndex > 0);
+  forwardBtn.disabled = !(t.histIndex < t.history.length - 1);
+  reloadBtn.disabled = false;
+}
+
+/* UI events */
+openBtn.addEventListener('click', () => {
+  const url = addressEl.value.trim();
+  if (!url) return;
+  if (!activeTabId) {
+    // no active tab -> create one
+    const id = createTab(url);
+    // createTab will switch to it automatically
+  } else {
+    // navigate current tab
+    navigateTabTo(activeTabId, url, {record:true});
+  }
+});
+
+// quick open via Enter key
+addressEl.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    openBtn.click();
+  }
+});
+
+newTabBtn.addEventListener('click', () => {
+  const id = createTab();
+  switchToTab(id);
+});
+
+backBtn.addEventListener('click', () => {
+  if (!activeTabId) return;
+  goBackInTab(activeTabId);
+});
+forwardBtn.addEventListener('click', () => {
+  if (!activeTabId) return;
+  goForwardInTab(activeTabId);
+});
+reloadBtn.addEventListener('click', () => {
+  reloadCurrent();
+});
+
+/* keyboard shortcuts */
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 't') { // Ctrl/Cmd + T -> new tab
+    e.preventDefault();
+    const id = createTab();
+    switchToTab(id);
+  }
+  if ((e.ctrlKey || e.metaKey) && e.key === 'w') { // close tab
+    e.preventDefault();
+    if (activeTabId) closeTab(activeTabId);
+  }
+  if ((e.ctrlKey || e.metaKey) && e.key === 'r') { // reload
+    e.preventDefault();
+    reloadCurrent();
+  }
+});
+
+/* create an initial tab to start */
+createTab('https://www.google.com');
+switchToTab(tabs[0].id);
+
+/* Notes for teachers/IT (not visible on UI):
+   - This app is intentionally HTML-only; it does not attempt to bypass network filters.
+   - If a site requires login (Google, YouTube), the teacher will need to sign in within the iframe or via school's SSO depending on network policies.
+   - If you need real OS-level integration (wider media support, signed app, admin-managed allowlist), consider packaging a proper Electron/desktop app or a managed enterprise browser — talk to your IT.
+*/
+</script>
+
+</body>
+</html>
