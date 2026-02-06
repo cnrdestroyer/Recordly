@@ -1,217 +1,39 @@
-<!-- made by chuck the goat -->
-<!-- jordan formatted it because chuck styles everything inline 💀 -->
-<!--chuck: jor jor is just mad >:#-->
-<link href="https://fonts.googleapis.com/css?family=Gluten" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<link href="https://fonts.cdnfonts.com/css/steiner" rel="stylesheet">
-<link href="https://fonts.cdnfonts.com/css/univers" rel="stylesheet">
-
-<head>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1149296688982018"
-    crossorigin="anonymous"></script>
-  <title>Recordly!</title>
-  <style>
-  body {
-    text-align: center;
-    margin: 0;
-  }
-</style>
-</head>
-
-<style>
-  input::placeholder {
-    color: black;
-  }
-
-  .centerstuffwhydoyoustyleeverythinginthedivcharlie {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-</style>
-
-<body style="background-color: #c2ddff;">
-
-  <!-- social media links in a bubble -->
-  <div style="position: fixed; top: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 1000; background-color: #ffffffb2; border-radius: 40px; border: 4px solid black">
-    <a href="https://www.facebook.com/charles.rohde.615952?mibextid=wwXIfr">
-      <img src="facebook.png" alt="Facebook" style="width: 60px;">
-    </a>
-    <a href="https://discord.gg/GcR7qfuq">
-      <img src="discord.png" alt="Discord" style="width: 60px;">
-    </a>
-  </div>
-
-<div style="
-    display: inline-block;
-    font-size: 20px;
-    font-weight: 900;
-    font-family: 'Univers';
-    text-align: center;
-    margin: 30px auto;
-    background-color: #ffffffb2;
-    border-radius: 5px;
-    padding: 20px;
-    border: 4px solid black;
-  ">
-
-  <!-- logo -->
-  <div class="centerstuffwhydoyoustyleeverythinginthedivcharlie">
-    <img src="skib.png" style="width: 600px;" alt="Recordly Logo">
-  </div>
-<input type="text" placeholder="YOUR DISCOGS API TOKEN" id="apiTokenInput">
-<p style="color: #b3a400;">!YOU MUST ENTER THIS FIELD!</p>
-  <!-- search bar -->
-  <input type="text" placeholder="label, year, artist, ect" class="record-input" oninput="search()" id="searchInput"
-    style="height: 40px; width: 60%; text-align: center; margin: 20px auto; display: block; box-sizing: border-box; background-color: #ffffffb2; font-family: 'Univers', sans-serif; border: 2px solid black; border-radius: 5px; font-size: 20px;">
-
-  <!-- result list -->
-  <ul id="results" class="links centerstuffwhydoyoustyleeverythinginthedivcharlie"
-    style="margin: 20px auto; font-family: 'Univers'; font-size: 30px; background-color: #ffffffb2; width: 90%; max-width: 900px; border-radius: 5px; border: 4px solid black; padding: 10px; box-sizing: border-box;"></ul>
-
-  <!-- intro text -->
-  <div id="recordly-intro"
-    style="font-size: 20px; font-weight: 900; font-family: 'Univers', sans-serif; color: black; text-align: center; margin: 30px auto; width: 90%; max-width: 700px; background-color: #ffffffb2; border-radius: 5px; padding: 20px; border: 4px solid black; box-sizing: border-box;">
-    <h2>Welcome to Recordly Studios!</h2>
-    <p><b>My name is Chuck. Recordly is a website that I’ve put a lot of effort into and I’m very proud of.</b></p>
-    <!--<p>I originally made this for my grandpa, but now I have hopes of giving this website to the whole world — completely free.</p>-->
-    <p>Recordly is a site designed to preserve your records forever. Just look up your record, and we’ll give you a QR code for it.</p>
-    <p>Print the QR code and stick it on the record — when scanned, it’ll show info about the record and what it’s worth.</p>
-    <p>In the future, we hope to add even more, like a built-in record scanner.</p>
-    <p>The best YOU can do? Join our Discord and leave a review. Enjoy!</p>
-    <p style="color: #b3a400;">DISCLAIMER --> you need to click the song to make the QR-Code Pop up.</p>
-  </div>
-
-  <!-- ✅ AdSense block -->
-  <ins class="adsbygoogle"
-       style="display:block; margin-top: 20px;"
-       data-ad-client="ca-pub-1149296688982018"
-       data-ad-slot="YOUR-AD-SLOT-ID"
-       data-ad-format="auto"
-       data-full-width-responsive="true"></ins>
-  <script>
-    (adsbygoogle = window.adsbygoogle || []).push({});
-  </script>
-</div>
-
-
-  <!-- popup -->
-  <div id="popup" class="centerstuffwhydoyoustyleeverythinginthedivcharlie"
-    style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: #ffffff; border:4px solid black; padding: 20px; border-radius: 5px; z-index:1000;">
-    <img src="" width="96" height="96" id="popup-cover" alt="Record Cover">
-    <div id="popup-qrcode" class="centerstuffwhydoyoustyleeverythinginthedivcharlie"></div>
-    <p id="popup-title" style="font-family: 'Univers'; font-size: 20px; font-weight: bold; margin: 10px;"></p>
-    <br>
-    <a href="" id="popup-link" style="font-family: 'Univers';"></a>
-    <br>
-    <button onclick="closePopup()" style="margin: 10px; border-radius: 20px; font-family: 'Univers'; font-size: 30px;">close</button>
-  </div>
+<body>
+<link href='https://fonts.googleapis.com/css?family=Gluten' rel='stylesheet'>
+<p class="gluten header1">minutes<p>
+<p class="gluten header2">by minutes studios</p>
+<input type="text" placeholder="greatnes awaits...." class="value gluten">
 </body>
-
-<!-- main logic -->
-<script>
-  let currentLink = '';
-  let currentTitle = '';
-  let timeoutId;
-
-function cleanInput(input) {
-  return input
-    .replace(/[^\w\s-:]/g, '')           // remove weird symbols but keep colons & dashes
-    .replace(/([a-z])([A-Z])/g, '$1 $2') // fixCamelCaseToSpaces
-    .replace(/\s{2,}/g, ' ')             // collapse multiple spaces
-    .toLowerCase()                      // lowercase for consistency
-    .split(/\s+/)                       // split into individual words
-    .map(word => word.trim())           // clean each word
-    .filter(word => word.length > 2)    // ignore short/filler words like "a", "by"
-    .slice(0, 50)                        // keep up to 50 words just in case
-    .join(' ');
-}
-
-async function search() {
-  const token = document.getElementById('apiTokenInput').value.trim();
-if (!token) {
-  document.getElementById('results').innerHTML = 'Please enter your Discogs API token above!';
-  return;
-}
-  clearTimeout(timeoutId);
-  timeoutId = setTimeout(async () => {
-    const rawInput = document.getElementById('searchInput').value.trim();
-    const input = cleanInput(rawInput);
-    const keywords = input.split(' ');
-    const results = document.getElementById('results');
-
-    if (keywords.length === 0) {
-      results.innerHTML = '';
-      return;
+<style>
+    .gluten {
+    font-family: 'Gluten';
     }
-
-    const allResults = new Map();
-    results.innerHTML = 'searching...';
-
-    for (const word of keywords.slice(0, 10)) { // search only first 10 keywords to not hammer the API
-const url = `https://api.discogs.com/database/search?q=${encodeURIComponent(input)}&type=release&exact=1&token=${token}&per_page=100`;
-      try {
-        const res = await fetch(url, {
-          headers: {
-            'User-Agent': 'RecordlyApp/1.0 +https://recordly.pro'
-          }
-        });
-        const data = await res.json();
-        if (data.results) {
-          data.results.forEach(item => {
-            if (!allResults.has(item.id)) {
-              allResults.set(item.id, item);
-            }
-          });
-        }
-      } catch (err) {
-        console.error('search failed:', err);
-      }
+    .header1 {
+        font-size: 100px;
+        text-align: center;
+        color: rgb(255, 170, 65); 
     }
-
-    results.innerHTML = '';
-    if (allResults.size === 0) {
-      results.innerHTML = 'no results found';
-      return;
+    .header2 {
+        text-align: center;
+        top: 100;
+        color: rgb(255, 170, 65); 
     }
-
-    for (const item of allResults.values()) {
-      const li = document.createElement('li');
-li.innerHTML = `
-  <a href="#" onclick="showPopup('https://www.discogs.com/release/${item.id}', '${item.title.replace(/'/g, "\\'")}', '${item.cover_image}')" style="color: black; display: flex; align-items: center; gap: 10px; text-decoration: none;">
-    <img src="${item.cover_image}" alt="cover" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
-    <div>
-      <strong>${item.title}</strong><br>
-      ${item.year || 'Unknown year'}
-    </div>
-  </a>
-`;
-
-      results.appendChild(li);
+    body {
+        background-color: rgb(49, 49, 49);
     }
-  }, 400);
-}
-
-  function showPopup(link, title, coverImg) {
-    currentLink = link;
-    currentTitle = title;
-    const popup = document.getElementById('popup');
-    const qrDiv = document.getElementById('popup-qrcode');
-    qrDiv.innerHTML = '';
-    new QRCode(qrDiv, {
-      text: link,
-      width: 200,
-      height: 200
-    });
-    document.getElementById('popup-cover').src = coverImg;
-    document.getElementById('popup-title').innerText = title;
-    document.getElementById('popup-link').innerText = link;
-    document.getElementById('popup-link').href = link;
-    popup.style.display = 'block';
-  }
-
-  function closePopup() {
-    document.getElementById('popup').style.display = 'none';
-  }
+    .value {
+          text-align: center;
+          border-radius: 10px;
+          height: 35px;
+          width: 800px;
+          position: absolute;
+          left: 20%;
+          background-color: rgb(86, 86, 86);
+          color:rgb(0, 0, 0)
+    }
+</style>
+ 
+<script async src="https://cse.google.com/cse.js?cx=9491ce6bd040e48d0">
 </script>
+<div class="gcse-search"></div>
+
